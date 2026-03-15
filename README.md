@@ -9,6 +9,18 @@ This repository also serves as a hands-on workshop designed for the Broward Coll
 ![AWS Automated Incident Response Architecture](images/AWSIncidentResponsePipeline.png) 
 
 
+## Results & Validation
+## Note
+All sensitive information in the following screenshots (including AWS Account IDs, IAM ARNs, and personal email addresses) has been censored.
+
+## Python Code Execution
+![Python Code Execution](images/CodeExecutionSuccess.png)
+
+## Isolated EC2 Instance
+![Isolated EC2 Instance](images/IsolatedEC2Instance.png)
+
+## SNS Email Alert
+![SNS Alert](images/EmailNotificationSent.png)
 
 
 ## Tools & Services Used
