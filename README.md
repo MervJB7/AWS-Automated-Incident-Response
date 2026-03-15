@@ -74,6 +74,9 @@ This repository also serves as a hands-on workshop designed for the Broward Coll
   }
 }
 
+
+Results & Validation
+
 ![Python Code Execution](images/CodeExecutionSuccess.png)
 
 ![Isolated EC2 Instance](images/IsolatedEC2Instance.png)
