@@ -1,0 +1,7 @@
+{
+  "source": ["aws.guardduty"],
+  "detail-type": ["GuardDuty Finding"],
+  "detail": {
+    "type": [{"prefix": "UnauthorizedAccess:EC2/"}, {"prefix": "Trojan:EC2/"}]
+  }
+}
