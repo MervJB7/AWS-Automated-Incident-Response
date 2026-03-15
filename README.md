@@ -3,7 +3,6 @@
 ## Objective
 This project builds an event-driven security pipeline to automatically detect and isolate compromised EC2 instances within a VPC. It demonstrates core cloud security principles, network automation, and Identity & Access Management (IAM) using AWS serverless technologies. By automating the containment phase, this architecture drastically reduces Mean Time To Respond (MTTR) from hours to seconds.
 
-This repository also serves as a hands-on workshop designed for the Broward College Cybersecurity Club to teach members practical cloud threat containment and foundational skills for network development and security engineering.
 
 ## Architecture
 ![AWS Automated Incident Response Architecture](images/AWSIncidentResponsePipeline.png) 
