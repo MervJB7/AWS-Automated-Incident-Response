@@ -8,6 +8,14 @@ This repository also serves as a hands-on workshop designed for the Broward Coll
 ## Architecture
 ![AWS Automated Incident Response Architecture](images/AWSIncidentResponsePipeline.png) 
 
+## Results & Validation
+
+![Python Code Execution](images/CodeExecutionSuccess.png)
+
+![Isolated EC2 Instance](images/IsolatedEC2Instance.png)
+
+![SNS Alert](images/EmailNotificationSent.png)
+
 
 ## Tools & Services Used
 * **Amazon GuardDuty:** Continuous threat detection and malicious IP monitoring using machine learning.
@@ -75,10 +83,4 @@ Paste the simulated GuardDuty finding below, replacing the placeholder with your
   }
 }
 
-Results & Validation
 
-![Python Code Execution](images/CodeExecutionSuccess.png)
-
-![Isolated EC2 Instance](images/IsolatedEC2Instance.png)
-
-![SNS Alert](images/EmailNotificationSent.png)
