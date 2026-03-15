@@ -7,7 +7,7 @@ This repository also serves as a hands-on workshop designed for the Broward Coll
 
 ## Architecture
 ![AWS Automated Incident Response Architecture](images/AWSIncidentResponsePipeline.png) 
-*(Note: Replace this image with your actual diagram in the images folder!)*
+
 
 ## Tools & Services Used
 * **Amazon GuardDuty:** Continuous threat detection and malicious IP monitoring using machine learning.
