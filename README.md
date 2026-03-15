@@ -57,11 +57,12 @@ This repository also serves as a hands-on workshop designed for the Broward Coll
 3. Set the Event Pattern using the custom JSON located in `policies/eventbridge_rule.json`. This filters the noise and ensures the rule only fires for high-severity EC2 network threats (like Trojans or unauthorized access).
 4. Set the target to your Lambda function.
 
-### Step 6: Test the Pipeline
-1. Navigate to the Lambda function and configure a new test event.
-    **Do not use the default "Hello World" test event.** The Python script specifically looks for the `detail` dictionary key. Using the default test will result in a `KeyError: 'detail'`.
+## Step 6: Test the Pipeline
 
-3. Paste the simulated GuardDuty finding below, replacing the placeholder with your real EC2 Instance ID:
+Navigate to the Lambda function and configure a new test event. **Do not use the default "Hello World" test event.** The Python script specifically looks for the `detail` dictionary key. Using the default test will result in a `KeyError: 'detail'`.
+
+Paste the simulated GuardDuty finding below, replacing the placeholder with your real EC2 Instance ID:
+
 ```json
 {
   "detail": {
@@ -73,7 +74,6 @@ This repository also serves as a hands-on workshop designed for the Broward Coll
     }
   }
 }
------
 
 Results & Validation
 
