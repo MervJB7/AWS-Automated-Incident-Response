@@ -6,7 +6,7 @@ This project builds an event-driven security pipeline to automatically detect an
 This repository also serves as a hands-on workshop designed for the Broward College Cybersecurity Club to teach members practical cloud threat containment and foundational skills for network development and security engineering.
 
 ## Architecture
-![AWS Automated Incident Response Architecture](images/architecture-diagram.png) 
+![AWS Automated Incident Response Architecture](images/AWSIncidentResponsePipeline.png) 
 *(Note: Replace this image with your actual diagram in the images folder!)*
 
 ## Tools & Services Used
