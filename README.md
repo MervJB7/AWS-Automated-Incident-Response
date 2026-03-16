@@ -23,7 +23,7 @@ All sensitive information in the following screenshots (including AWS Account ID
 
 
 ## Tools & Services Used
-* **Amazon GuardDuty:** Continuous threat detection and malicious IP monitoring using machine learning.
+* **Amazon GuardDuty:** Continuous threat detection and malicious IP monitoring.
 * **Amazon EventBridge:** Serverless event routing and alert filtering.
 * **AWS Lambda:** Serverless compute to execute the Python containment script.
 * **Amazon SNS:** Automated email paging for the incident response team.
