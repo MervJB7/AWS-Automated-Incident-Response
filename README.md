@@ -74,19 +74,6 @@ All sensitive information in the following screenshots (including AWS Account ID
 
 Navigate to the Lambda function and configure a new test event. **Do not use the default "Hello World" test event.** The Python script specifically looks for the `detail` dictionary key. Using the default test will result in a `KeyError: 'detail'`.
 
-Paste the simulated GuardDuty finding below, replacing the placeholder with your real EC2 Instance ID:
-
-```json
-{
-  "detail": {
-    "type": "UnauthorizedAccess:EC2/MaliciousIPCaller.Custom",
-    "resource": {
-      "instanceDetails": {
-        "instanceId": "i-YOUR_REAL_INSTANCE_ID"
-      }
-    }
-  }
-}
 ### Step 7: Verification (The Proof)
 
 Check the email inbox you subscribed with in Step 2. You should have received a new "Security-Alerts" notification detailing the compromised Instance ID.
@@ -103,3 +90,16 @@ Navigate to Lambda and delete the incident response function. Then, go to IAM an
 Navigate to SNS and delete the Security-Alerts topic and your email subscription.
 Navigate to GuardDuty and suspend or disable the service.
 
+Paste the simulated GuardDuty finding below, replacing the placeholder with your real EC2 Instance ID:
+
+```json
+{
+  "detail": {
+    "type": "UnauthorizedAccess:EC2/MaliciousIPCaller.Custom",
+    "resource": {
+      "instanceDetails": {
+        "instanceId": "i-YOUR_REAL_INSTANCE_ID"
+      }
+    }
+  }
+}
