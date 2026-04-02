@@ -87,5 +87,19 @@ Paste the simulated GuardDuty finding below, replacing the placeholder with your
     }
   }
 }
+### Step 7: Verification (The Proof)
 
+Check the email inbox you subscribed with in Step 2. You should have received a new "Security-Alerts" notification detailing the compromised Instance ID.
+Navigate back to the EC2 Dashboard and select your test instance.
+
+Click on the "Security" tab. Verify that the original Security Group has been removed and replaced entirely by the Isolation-SG. This confirms the automated quarantine was successful.
+
+### Step 8: Teardown and Clean Up (The Reset)
+
+Crucial Step: To avoid unwanted AWS billing, you must destroy the infrastructure built for this lab.
+Terminate the EC2 instance. Once the instance state says "Terminated," delete the Isolation-SG Security Group.
+Navigate to EventBridge and delete the GuardDuty-EC2-Malicious-IP rule.
+Navigate to Lambda and delete the incident response function. Then, go to IAM and delete the custom Lambda execution role.
+Navigate to SNS and delete the Security-Alerts topic and your email subscription.
+Navigate to GuardDuty and suspend or disable the service.
 
