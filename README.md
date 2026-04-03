@@ -41,58 +41,61 @@ All sensitive information in the following screenshots (including AWS Account ID
 ## Step-by-Step Guide
 
 ### Step 1: Prepare the Infrastructure (The Victim and the Jail)
-1. Launch a basic Amazon Linux EC2 instance. Leave it in its default Security Group. Note the `Instance ID`.
-2. Navigate to **Security Groups** and create a new one named `Isolation-SG`. 
-    **Crucial Step:** Do *not* add any Inbound or Outbound rules. An empty Security Group acts as a quarantine by dropping all network connections. Note the `Security Group ID`.
+*Launch Instance:* Launch a basic Amazon Linux EC2 instance. Use x86_64 architecture. Leave it in its default Security Group. Note the Instance ID.
+
+Create Quarantine: Navigate to Security Groups and create a new one named Isolation-SG.
+
+Crucial Step: Do not add any Inbound or Outbound rules. An empty Security Group acts as a quarantine by dropping all network connections. Note the Security Group ID.
 
 ### Step 2: Set Up Amazon SNS (The Pager)
-1. In the SNS Dashboard, create a **Standard** topic named `Security-Alerts`.
-2. Create a subscription, choose **Email**, and enter your email address. Confirm the subscription in your inbox.
-3. Note the **Topic ARN**. 
-    *Troubleshooting Tip:* Ensure you copy the *Topic ARN*, not the *Subscription ARN* (which has a long UUID at the end). Using the Subscription ARN will cause Lambda to crash later with an `Invalid parameter: Topic Name` error.
+Create Topic: In the SNS Dashboard, create a Standard topic named Security-Alerts.
 
-### Step 3: Create the IAM Role for Lambda
-1. In IAM, create a new role for the **Lambda** use case.
-2. Attach the `AWSLambdaBasicExecutionRole` policy.
-3. Once the role is created, add an **Inline Policy** using the JSON file located in `policies/iam_role_policy.json` in this repository. This explicit allow-list grants Lambda permission to modify EC2 security groups and publish to SNS.
+Subscribe: Create a subscription, choose Email, and enter your email address.
 
-### Step 4: Deploy the Lambda Function (The Brain)
-1. Create a new Lambda function using **Python 3.12** and attach the IAM role from Step 3.
-2. Paste the Python code located in `src/lambda_function.py`.
-3. Under the **Configuration -> Environment variables** tab, add two keys:
-   * `ISOLATION_SG_ID` = [Your Security Group ID]
-   * `SNS_TOPIC_ARN` = [Your SNS Topic ARN]
-   * *Troubleshooting Tip:* Do not use quotation marks around your environment variables.
+Confirm: Check your inbox and click the Confirm subscription link. The status in AWS must change from Pending to Confirmed.
 
-### Step 5: Configure EventBridge (The Dispatcher)
-1. Ensure GuardDuty is enabled in your account.
-2. In EventBridge, create a new rule named `GuardDuty-EC2-Malicious-IP`.
-3. Set the Event Pattern using the custom JSON located in `policies/eventbridge_rule.json`. This filters the noise and ensures the rule only fires for high-severity EC2 network threats (like Trojans or unauthorized access).
-4. Set the target to your Lambda function.
+Note the Topic ARN: Ensure you copy the Topic ARN, not the Subscription ARN. Using the Subscription ARN will cause the Lambda to crash later with an Invalid parameter error.
 
-## Step 6: Test the Pipeline
+### Step 3: Enable Amazon GuardDuty (The Sensor)
+Enable Service: Navigate to the GuardDuty console. If it is not already active, click Get Started and then Enable GuardDuty.
 
-Navigate to the Lambda function and configure a new test event. **Do not use the default "Hello World" test event.** The Python script specifically looks for the `detail` dictionary key. Using the default test will result in a `KeyError: 'detail'`.
+Adjust Frequency: (Optional but Recommended) Go to Settings and change the Finding publishing frequency to 1 minute. This ensures your automated response triggers faster during the lab.
 
-### Step 7: Verification (The Proof)
+### Step 4: Create the IAM Role for Lambda
+Create Role: In IAM, create a new role for the Lambda use case.
 
-Check the email inbox you subscribed with in Step 2. You should have received a new "Security-Alerts" notification detailing the compromised Instance ID.
-Navigate back to the EC2 Dashboard and select your test instance.
+Attach Managed Policy: Search for and attach the AWSLambdaBasicExecutionRole policy.
 
-Click on the "Security" tab. Verify that the original Security Group has been removed and replaced entirely by the Isolation-SG. This confirms the automated quarantine was successful.
+Add Inline Policy: Once the role is created, click Add permissions > Create inline policy. Click the JSON tab and paste the code from policies/iam_role_policy.json in your repository.
 
-### Step 8: Teardown and Clean Up (The Reset)
+Troubleshooting Tip: Ensure the JSON starts with "Version": "2012-10-17". If it starts with "source":, you are using the EventBridge JSON by mistake.
 
-Crucial Step: To avoid unwanted AWS billing, you must destroy the infrastructure built for this lab.
-Terminate the EC2 instance. Once the instance state says "Terminated," delete the Isolation-SG Security Group.
-Navigate to EventBridge and delete the GuardDuty-EC2-Malicious-IP rule.
-Navigate to Lambda and delete the incident response function. Then, go to IAM and delete the custom Lambda execution role.
-Navigate to SNS and delete the Security-Alerts topic and your email subscription.
-Navigate to GuardDuty and suspend or disable the service.
+### Step 5: Deploy the Lambda Function (The Brain)
+Create Function: Create a new Lambda function using Python 3.12 and the x86_64 architecture. Attach the IAM role from Step 4.
 
-Paste the simulated GuardDuty finding below, replacing the placeholder with your real EC2 Instance ID:
+Paste Code: Paste the Python code located in src/lambda_function.py.
 
-```json
+Environment Variables: Under Configuration -> Environment variables, add:
+
+ISOLATION_SG_ID = [Your Security Group ID]
+
+SNS_TOPIC_ARN = [Your SNS Topic ARN]
+
+Troubleshooting Tip: Do not use quotation marks around the values in the AWS Console.
+
+### Step 6: Configure EventBridge (The Dispatcher)
+Create Rule: In EventBridge, create a new rule named GuardDuty-EC2-Malicious-IP. Select Rule with an event pattern.
+
+Custom Pattern: Paste the JSON from policies/eventbridge_rule.json. This filters for UnauthorizedAccess:EC2/ and Trojan:EC2/ prefixes.
+
+Set Target: Select Lambda function as the target and pick your incident response function.
+
+### Step 7: Test the Pipeline (The Simulation)
+Configure Test Event: In the Lambda console, click the Test tab. Select Create new event.
+
+JSON Body: Paste the following JSON. Replace i-YOUR_REAL_INSTANCE_ID with your actual Instance ID (keep the double quotes):
+
+JSON
 {
   "detail": {
     "type": "UnauthorizedAccess:EC2/MaliciousIPCaller.Custom",
@@ -103,3 +106,16 @@ Paste the simulated GuardDuty finding below, replacing the placeholder with your
     }
   }
 }
+Execution: Click Test. If successful, the execution summary will show a green Succeeded box.
+
+### Step 8: Verification (The Proof)
+Check Email: You should receive a Security-Alerts notification detailing the compromised Instance ID.
+
+Check EC2 Security: Navigate to the EC2 Dashboard, select your instance, and click the Security tab. Verify the original Security Group has been removed and replaced entirely by the Isolation-SG.
+
+### Step 9: Teardown and Clean Up (The Reset)
+Terminate EC2: To avoid unwanted AWS billing, terminate the test instance.
+
+Delete Resources: Delete the Isolation-SG, the EventBridge rule, the Lambda function, the IAM role, and the SNS Topic.
+
+Disable GuardDuty: Navigate to GuardDuty > Settings and choose Disable or Suspend to stop finding generation.
