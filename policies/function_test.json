@@ -1,0 +1,10 @@
+{
+  "detail": {
+    "type": "UnauthorizedAccess:EC2/MaliciousIPCaller.Custom",
+    "resource": {
+      "instanceDetails": {
+        "instanceId": "i-YOUR_REAL_INSTANCE_ID"
+      }
+    }
+  }
+}
