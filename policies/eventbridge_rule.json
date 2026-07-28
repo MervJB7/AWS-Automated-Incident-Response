@@ -2,6 +2,11 @@
   "source": ["aws.guardduty"],
   "detail-type": ["GuardDuty Finding"],
   "detail": {
-    "type": [{"prefix": "UnauthorizedAccess:EC2/"}, {"prefix": "Trojan:EC2/"}]
+    "type": [
+      {"prefix": "UnauthorizedAccess:EC2/"},
+      {"prefix": "Trojan:EC2/"},
+      {"prefix": "UnauthorizedAccess:IAMUser/"},
+      {"prefix": "CredentialAccess:IAMUser/"}
+    ]
   }
 }
